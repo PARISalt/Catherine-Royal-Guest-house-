@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Rooftop | Catherine Royale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: { DEFAULT: '#D4AF37', light: '#F3E5AB', dark: '#AA8C2C' },
+                        black: { DEFAULT: '#0A0A0A', rich: '#111111', light: '#1A1A1A' },
+                        white: { DEFAULT: '#FAFAFA' }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #FAFAFA; }
+        .event-card { transition: transform 0.5s ease; }
+        .event-card:hover { transform: translateY(-10px); }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="fixed w-full z-50 bg-black bg-opacity-95 shadow-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-serif text-gold font-semibold tracking-wider">
+                CATHERINE ROYALE
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-white">
+                <a href="index.html" class="hover:text-gold transition-colors">Home</a>
+                <a href="rooms.html" class="hover:text-gold transition-colors">Rooms & Suites</a>
+                <a href="events.html" class="text-gold transition-colors">Events</a>
+                <a href="gallery.html" class="hover:text-gold transition-colors">Gallery</a>
+            </div>
+            <a href="rooms.html" class="hidden md:block border border-gold text-gold hover:bg-gold hover:text-black transition-colors px-6 py-2 uppercase text-xs font-semibold tracking-widest">
+                Book a Space
+            </a>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-16 px-6 text-center">
+        <h1 class="text-4xl md:text-6xl font-serif text-white mb-4">Events & Rooftop</h1>
+        <div class="w-24 h-1 bg-gold mx-auto mb-6"></div>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg font-light">Host unforgettable corporate gatherings, private parties, and luxurious evenings with stunning views.</p>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-6 pb-24 grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        
+        <div class="event-card bg-black.light border border-gray-800 hover:border-gold rounded-sm overflow-hidden flex flex-col">
+            <div class="h-64 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Conference Hall">
+            </div>
+            <div class="p-8 flex flex-col flex-grow">
+                <h3 class="text-2xl font-serif text-gold mb-3">Conference Hall</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-6">Equipped with modern presentation technology and premium seating, perfectly suited for corporate retreats, seminars, and high-level meetings.</p>
+                <a href="rooms.html" class="mt-auto inline-block text-white uppercase tracking-widest text-xs font-semibold hover:text-gold transition-colors">Request Booking &rarr;</a>
+            </div>
+        </div>
+
+        <div class="event-card bg-black.light border border-gray-800 hover:border-gold rounded-sm overflow-hidden flex flex-col">
+            <div class="h-64 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1572360678175-650af33de205?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="Rooftop">
+            </div>
+            <div class="p-8 flex flex-col flex-grow">
+                <h3 class="text-2xl font-serif text-gold mb-3">Rooftop Lounge</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-6">Experience breathtaking, panoramic views of Bamenda. The ideal open-air setting for elegant cocktail hours, private parties, and evening networking.</p>
+                <a href="rooms.html" class="mt-auto inline-block text-white uppercase tracking-widest text-xs font-semibold hover:text-gold transition-colors">Request Booking &rarr;</a>
+            </div>
+        </div>
+
+        <div class="event-card bg-black.light border border-gray-800 hover:border-gold rounded-sm overflow-hidden flex flex-col">
+            <div class="h-64 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1519710164239-da123dc03ef4?q=80&w=2000&auto=format&fit=crop" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700" alt="VIP Lounge">
+            </div>
+            <div class="p-8 flex flex-col flex-grow">
+                <h3 class="text-2xl font-serif text-gold mb-3">Executive VIP Lounge</h3>
+                <p class="text-gray-400 font-light text-sm leading-relaxed mb-6">An intimate, richly designed space reserved for discreet meetings, private dining, or simply relaxing with premium refreshments.</p>
+                <a href="rooms.html" class="mt-auto inline-block text-white uppercase tracking-widest text-xs font-semibold hover:text-gold transition-colors">Request Booking &rarr;</a>
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>
