@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms & Suites | Catherine Royale</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: { DEFAULT: '#D4AF37', light: '#F3E5AB', dark: '#AA8C2C' },
+                        black: { DEFAULT: '#0A0A0A', rich: '#111111', light: '#1A1A1A' },
+                        white: { DEFAULT: '#FAFAFA' }
+                    },
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #0A0A0A; color: #FAFAFA; }
+        
+        .room-card:hover .room-img { transform: scale(1.05); }
+        .room-img { transition: transform 0.7s ease; }
+
+        /* Modal Styles */
+        #booking-modal {
+            display: none;
+            backdrop-filter: blur(5px);
+        }
+        #booking-modal.active {
+            display: flex;
+        }
+        
+        /* Custom input styling for dark theme */
+        input[type="date"], select, input[type="text"], input[type="tel"] {
+            background-color: #1A1A1A;
+            border: 1px solid #333;
+            color: #FAFAFA;
+            color-scheme: dark;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #D4AF37;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="fixed w-full z-50 bg-black bg-opacity-95 shadow-md border-b border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-serif text-gold font-semibold tracking-wider">
+                CATHERINE ROYALE
+            </a>
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-white">
+                <a href="index.html" class="hover:text-gold transition-colors">Home</a>
+                <a href="rooms.html" class="text-gold transition-colors">Rooms & Suites</a>
+                <a href="events.html" class="hover:text-gold transition-colors">Events</a>
+                <a href="gallery.html" class="hover:text-gold transition-colors">Gallery</a>
+            </div>
+            <button onclick="openBookingModal('General')" class="hidden md:block bg-gold text-black hover:bg-white hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] transition-all duration-300 px-6 py-2 uppercase text-xs font-semibold tracking-widest">
+                Reserve Now
+            </button>
+        </div>
+    </nav>
+
+    <header class="pt-32 pb-16 px-6 text-center">
+        <h1 class="text-4xl md:text-6xl font-serif text-white mb-4">Rooms & Suites</h1>
+        <div class="w-24 h-1 bg-gold mx-auto mb-6"></div>
+        <p class="text-gray-400 max-w-2xl mx-auto text-lg font-light">Uncompromising luxury and comfort. Discover your perfect sanctuary.</p>
+    </header>
+
+    <section class="max-w-7xl mx-auto px-6 pb-24 space-y-16">
+        
+        <div class="room-card group flex flex-col md:flex-row bg-black.light rounded-lg overflow-hidden border border-gray-800 hover:border-gold transition-colors duration-500">
+            <div class="md:w-1/2 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=2000&auto=format&fit=crop" alt="Executive Suite" class="room-img w-full h-full object-cover min-h-[300px]">
+            </div>
+            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                <div class="text-gold tracking-widest text-xs uppercase mb-2">Premium</div>
+                <h2 class="text-3xl font-serif mb-4">Executive VIP Suite</h2>
+                <p class="text-gray-400 mb-6 font-light leading-relaxed">Our most spacious and luxurious offering. Features elegant syndicats & arts design, premium finishes, and a private lounging area for the ultimate VIP experience.</p>
+                <ul class="text-sm text-gray-300 mb-8 space-y-2">
+                    <li>✓ High-Speed Wi-Fi</li>
+                    <li>✓ Air Conditioning & Hot Water</li>
+                    <li>✓ Exclusive Access</li>
+                </ul>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-2xl font-serif text-white">Contact for Pricing</span>
+                    <button onclick="openBookingModal('Executive VIP Suite')" class="border border-gold text-gold hover:bg-gold hover:text-black transition-colors px-6 py-3 uppercase text-xs tracking-widest">Book Suite</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="room-card group flex flex-col md:flex-row-reverse bg-black.light rounded-lg overflow-hidden border border-gray-800 hover:border-gold transition-colors duration-500">
+            <div class="md:w-1/2 overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop" alt="2-Bedroom Condo" class="room-img w-full h-full object-cover min-h-[300px]">
+            </div>
+            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+                <div class="text-gold tracking-widest text-xs uppercase mb-2">Fully Furnished</div>
+                <h2 class="text-3xl font-serif mb-4">Modern 2-Bedroom Condo</h2>
+                <p class="text-gray-400 mb-6 font-light leading-relaxed">Perfect for families or extended stays. A fully furnished, self-contained apartment with high-end appliances, absolute privacy, and total comfort.</p>
+                <ul class="text-sm text-gray-300 mb-8 space-y-2">
+                    <li>✓ 2 Bedrooms & Living Area</li>
+                    <li>✓ High-Speed Wi-Fi</li>
+                    <li>✓ Air Conditioning & Hot Water</li>
+                </ul>
+                <div class="mt-auto flex items-center justify-between">
+                    <span class="text-2xl font-serif text-white">Contact for Pricing</span>
+                    <button onclick="openBookingModal('Modern 2-Bedroom Condo')" class="border border-gold text-gold hover:bg-gold hover:text-black transition-colors px-6 py-3 uppercase text-xs tracking-widest">Book Condo</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div id="booking-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-90 items-center justify-center p-4">
+        <div class="bg-[#111111] border border-gold p-8 max-w-lg w-full rounded-sm relative">
+            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gold text-2xl">&times;</button>
+            <h3 class="text-2xl font-serif text-gold mb-2">Reservation Request</h3>
+            <p class="text-gray-400 text-sm mb-6">Fill out your details to check availability and proceed to payment.</p>
+            
+            <form id="reservation-form" class="space-y-4" onsubmit="event.preventDefault(); alert('Backend integration required for Momo processing.');">
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Room Selection</label>
+                    <select id="room-select" class="w-full p-3 rounded-sm">
+                        <option>Executive VIP Suite</option>
+                        <option>Modern 2-Bedroom Condo</option>
+                        <option>Conference Hall</option>
+                    </select>
+                </div>
+                <div class="flex space-x-4">
+                    <div class="w-1/2">
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Check-in</label>
+                        <input type="date" class="w-full p-3 rounded-sm" required>
+                    </div>
+                    <div class="w-1/2">
+                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Check-out</label>
+                        <input type="date" class="w-full p-3 rounded-sm" required>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Full Name</label>
+                    <input type="text" placeholder="John Doe" class="w-full p-3 rounded-sm" required>
+                </div>
+                <div>
+                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Mobile Money Number</label>
+                    <input type="tel" placeholder="+237 ..." class="w-full p-3 rounded-sm" required>
+                </div>
+                <button type="submit" class="w-full bg-gold text-black py-4 uppercase tracking-widest font-semibold hover:bg-white transition-colors mt-4">
+                    Proceed to Payment (Momo)
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const modal = document.getElementById('booking-modal');
+        const roomSelect = document.getElementById('room-select');
+
+        function openBookingModal(roomName) {
+            modal.classList.add('active');
+            if(roomName !== 'General') {
+                roomSelect.value = roomName;
+            }
+        }
+
+        function closeBookingModal() {
+            modal.classList.remove('active');
+        }
+
+        // Close modal if clicking outside the box
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeBookingModal();
+            }
+        });
+    </script>
+</body>
+  </html>
+  
