@@ -12,9 +12,8 @@
             theme: {
                 extend: {
                     colors: {
-                        gold: { DEFAULT: '#D4AF37', light: '#F3E5AB', dark: '#AA8C2C' },
-                        black: { DEFAULT: '#0A0A0A', rich: '#111111', light: '#1A1A1A' },
-                        white: { DEFAULT: '#FAFAFA' }
+                        gold: { DEFAULT: '#D4AF37', hover: '#F3E5AB' },
+                        black: { DEFAULT: '#0A0A0A', light: '#111111', lighter: '#1A1A1A' }
                     },
                     fontFamily: {
                         sans: ['Montserrat', 'sans-serif'],
@@ -27,204 +26,281 @@
     <style>
         body { background-color: #0A0A0A; color: #FAFAFA; }
         
-        .room-card:hover .room-img { transform: scale(1.05); }
-        .room-img { transition: transform 0.7s ease; }
-
-        /* Modal Styles */
-        #booking-modal {
-            display: none;
-            backdrop-filter: blur(5px);
-        }
-        #booking-modal.active {
-            display: flex;
-        }
+        /* Modals */
+        .modal-overlay { display: none; backdrop-filter: blur(10px); }
+        .modal-overlay.active { display: flex; animation: fadeIn 0.3s ease; }
         
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Inputs */
         input[type="date"], select, input[type="text"], input[type="tel"] {
-            background-color: #1A1A1A;
-            border: 1px solid #333;
-            color: #FAFAFA;
-            color-scheme: dark;
+            background-color: #1A1A1A; border: 1px solid #333; color: #FAFAFA; color-scheme: dark;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #D4AF37;
-            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        input:focus, select:focus { outline: none; border-color: #D4AF37; }
+
+        /* Auto-Rotating Slider Styles */
+        .tour-content { display: none; }
+        .tour-content.active { display: block; }
+        .slide-container { position: relative; width: 100%; height: 50vh; overflow: hidden; border: 1px solid #333; }
+        .slide { 
+            position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; 
+            opacity: 0; transition: opacity 0.8s ease-in-out; 
         }
+        .slide.active { opacity: 1; }
+        
+        /* Amenities Grid */
+        .amenity-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: 1.5rem; }
+        @media (min-width: 640px) { .amenity-grid { grid-template-columns: repeat(4, 1fr); } }
+        .amenity-item { text-align: center; padding: 1rem; background-color: #1A1A1A; border: 1px solid #222; border-radius: 4px; }
     </style>
 </head>
 <body class="font-sans antialiased">
 
     <nav class="fixed w-full z-50 bg-black bg-opacity-95 shadow-md border-b border-gray-800">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="index.html" class="text-2xl font-serif text-gold font-semibold tracking-wider">
-                CATHERINE ROYALE
-            </a>
+            <a href="index.html" class="text-2xl font-serif text-gold font-semibold tracking-wider">CATHERINE ROYALE</a>
             <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest text-white">
                 <a href="index.html" class="hover:text-gold transition-colors">Home</a>
                 <a href="rooms.html" class="text-gold transition-colors">Rooms & Suites</a>
-                <a href="events.html" class="hover:text-gold transition-colors">Events</a>
                 <a href="gallery.html" class="hover:text-gold transition-colors">Gallery</a>
             </div>
-            <button onclick="openBookingModal('General')" class="hidden md:block bg-gold text-black hover:bg-white hover:shadow-[0_0_15px_rgba(212,175,55,0.5)] transition-all duration-300 px-6 py-2 uppercase text-xs font-semibold tracking-widest">
-                Reserve Now
-            </button>
         </div>
     </nav>
 
     <header class="pt-32 pb-12 px-6 text-center">
         <h1 class="text-4xl md:text-6xl font-serif text-white mb-4">Rooms & Suites</h1>
         <div class="w-24 h-1 bg-gold mx-auto mb-6"></div>
-        <p class="text-gray-400 max-w-2xl mx-auto text-lg font-light mb-6">Uncompromising luxury and comfort. Discover your perfect sanctuary.</p>
-        
-        <div class="inline-block border border-gold px-6 py-3 rounded-sm bg-black.light">
-            <span class="text-gold font-semibold tracking-widest text-sm uppercase">Exclusive Offer:</span>
-            <span class="text-gray-300 text-sm ml-2">Book any unit for 5+ nights to unlock our extended stay discount.</span>
-        </div>
     </header>
 
-    <section class="max-w-7xl mx-auto px-6 pb-24 space-y-16">
+    <section class="max-w-6xl mx-auto px-6 pb-24 space-y-16">
         
-        <div class="room-card group flex flex-col md:flex-row bg-black.light rounded-lg overflow-hidden border border-gray-800 hover:border-gold transition-colors duration-500">
-            <div class="md:w-1/2 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2000&auto=format&fit=crop" alt="Luxury Apartment" class="room-img w-full h-full object-cover min-h-[300px]">
+        <div class="flex flex-col md:flex-row bg-black.light rounded-sm border border-gray-800 hover:border-gold transition-colors duration-500">
+            <div class="md:w-5/12 overflow-hidden relative">
+                <img src="Images/apt1.jpg" alt="Luxury Apartment" class="w-full h-full object-cover min-h-[300px] opacity-80 hover:opacity-100 transition-opacity">
             </div>
-            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
                 <div class="text-gold tracking-widest text-xs uppercase mb-2">Premium Space</div>
                 <h2 class="text-3xl font-serif mb-4">Luxury Apartments</h2>
-                <p class="text-gray-400 mb-6 font-light leading-relaxed">Expansive, fully-furnished apartments offering the pinnacle of privacy and modern comfort. Perfect for groups or extended stays needing premium amenities.</p>
-                
-                <div class="mb-8">
-                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Available Units:</p>
-                    <div class="flex flex-wrap gap-2 text-sm text-gray-300">
-                        <span class="bg-[#111111] border border-gray-700 px-3 py-1 rounded-sm">GF Apt A</span>
-                        <span class="bg-[#111111] border border-gray-700 px-3 py-1 rounded-sm">GF Apt B</span>
-                        <span class="bg-[#111111] border border-gray-700 px-3 py-1 rounded-sm">1F Apt A</span>
-                        <span class="bg-[#111111] border border-gray-700 px-3 py-1 rounded-sm">1F Apt B</span>
+                <p class="text-gray-400 mb-6 font-light leading-relaxed">Expansive, fully-furnished apartments offering absolute privacy. Perfect for groups or extended stays needing premium amenities and full kitchens.</p>
+                <div class="mt-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-gray-800 pt-6">
+                    <div>
+                        <span class="text-3xl font-serif text-white block">50,000 <span class="text-sm font-sans text-gold">CFA/night</span></span>
                     </div>
-                </div>
-
-                <div class="mt-auto flex items-center justify-between">
-                    <span class="text-3xl font-serif text-white">50,000 <span class="text-sm font-sans text-gold">CFA / night</span></span>
-                    <button onclick="openBookingModal('Apartment')" class="border border-gold text-gold hover:bg-gold hover:text-black transition-colors px-6 py-3 uppercase text-xs tracking-widest">Reserve</button>
+                    <div class="flex space-x-3 w-full sm:w-auto">
+                        <button onclick="openTour('apartment')" class="flex-1 sm:flex-none text-white border border-gray-600 hover:border-gold hover:text-gold px-6 py-3 uppercase text-xs tracking-widest transition-all">Take Tour</button>
+                        <button onclick="openBookingModal('Apartment')" class="flex-1 sm:flex-none bg-gold text-black hover:bg-white px-6 py-3 uppercase text-xs tracking-widest font-semibold transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">Reserve</button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="room-card group flex flex-col md:flex-row-reverse bg-black.light rounded-lg overflow-hidden border border-gray-800 hover:border-gold transition-colors duration-500">
-            <div class="md:w-1/2 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1598928506311-c55dd5802c27?q=80&w=2000&auto=format&fit=crop" alt="Premium Studio" class="room-img w-full h-full object-cover min-h-[300px]">
+        <div class="flex flex-col md:flex-row-reverse bg-black.light rounded-sm border border-gray-800 hover:border-gold transition-colors duration-500">
+            <div class="md:w-5/12 overflow-hidden relative">
+                <img src="Images/studio1.jpg" alt="Premium Studio" class="w-full h-full object-cover min-h-[300px] opacity-80 hover:opacity-100 transition-opacity">
             </div>
-            <div class="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
+            <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center">
                 <div class="text-gold tracking-widest text-xs uppercase mb-2">Intimate Comfort</div>
                 <h2 class="text-3xl font-serif mb-4">Premium Studios</h2>
                 <p class="text-gray-400 mb-6 font-light leading-relaxed">Elegantly designed studio units featuring high-end aesthetics and maximum comfort. An ideal retreat for couples or solo travelers.</p>
-                
-                <div class="mb-8">
-                    <p class="text-xs uppercase tracking-widest text-gray-500 mb-2">Available Units:</p>
-                    <div class="flex flex-wrap gap-2 text-sm text-gray-300">
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">GF A1</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">GF A2</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">GF B1</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">GF B2</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">1F A1</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">1F A2</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">1F B1</span>
-                        <span class="bg-[#111111] border border-gray-700 px-2 py-1 rounded-sm text-xs">1F B2</span>
+                <div class="mt-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 border-t border-gray-800 pt-6">
+                    <div>
+                        <span class="text-3xl font-serif text-white block">35,000 <span class="text-sm font-sans text-gold">CFA/night</span></span>
                     </div>
-                </div>
-
-                <div class="mt-auto flex items-center justify-between">
-                    <span class="text-3xl font-serif text-white">35,000 <span class="text-sm font-sans text-gold">CFA / night</span></span>
-                    <button onclick="openBookingModal('Studio')" class="border border-gold text-gold hover:bg-gold hover:text-black transition-colors px-6 py-3 uppercase text-xs tracking-widest">Reserve</button>
+                    <div class="flex space-x-3 w-full sm:w-auto">
+                        <button onclick="openTour('studio')" class="flex-1 sm:flex-none text-white border border-gray-600 hover:border-gold hover:text-gold px-6 py-3 uppercase text-xs tracking-widest transition-all">Take Tour</button>
+                        <button onclick="openBookingModal('Studio')" class="flex-1 sm:flex-none bg-gold text-black hover:bg-white px-6 py-3 uppercase text-xs tracking-widest font-semibold transition-all shadow-[0_0_15px_rgba(212,175,55,0.2)]">Reserve</button>
+                    </div>
                 </div>
             </div>
         </div>
-
     </section>
 
-    <div id="booking-modal" class="fixed inset-0 z-[100] bg-black bg-opacity-90 items-center justify-center p-4">
-        <div class="bg-[#111111] border border-gold p-6 md:p-8 max-w-lg w-full rounded-sm relative max-h-[90vh] overflow-y-auto">
-            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gold text-2xl">&times;</button>
-            <h3 class="text-2xl font-serif text-gold mb-2">Reservation Request</h3>
-            <p class="text-gray-400 text-sm mb-6">Fill out your details. Discounts apply automatically for stays over 5 days.</p>
+    <div id="tour-modal" class="modal-overlay fixed inset-0 z-[110] bg-black bg-opacity-95 items-center justify-center p-4">
+        <div class="bg-black.light border border-gray-800 w-full max-w-5xl mx-auto rounded-sm overflow-hidden relative max-h-[95vh] overflow-y-auto">
+            <button onclick="closeTour()" class="absolute top-4 right-4 z-10 bg-black bg-opacity-50 text-white hover:text-gold text-3xl w-10 h-10 flex items-center justify-center rounded-full">&times;</button>
             
-            <form id="reservation-form" class="space-y-4" onsubmit="event.preventDefault(); alert('Backend integration required for Momo processing.');">
-                
-                <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Select Specific Unit</label>
-                    <select id="room-select" class="w-full p-3 rounded-sm text-sm">
-                        <optgroup label="Luxury Apartments (50,000 CFA/night)">
-                            <option value="GF_A">Ground Floor Apartment A</option>
-                            <option value="GF_B">Ground Floor Apartment B</option>
-                            <option value="1F_A">1st Floor Apartment A</option>
-                            <option value="1F_B">1st Floor Apartment B</option>
-                        </optgroup>
-                        <optgroup label="Premium Studios (35,000 CFA/night)">
-                            <option value="GF_A1">Ground Floor Studio A1</option>
-                            <option value="GF_A2">Ground Floor Studio A2</option>
-                            <option value="GF_B1">Ground Floor Studio B1</option>
-                            <option value="GF_B2">Ground Floor Studio B2</option>
-                            <option value="1F_A1">1st Floor Studio A1</option>
-                            <option value="1F_A2">1st Floor Studio A2</option>
-                            <option value="1F_B1">1st Floor Studio B1</option>
-                            <option value="1F_B2">1st Floor Studio B2</option>
-                        </optgroup>
-                    </select>
+            <div id="apartment-tour" class="tour-content">
+                <div class="slide-container">
+                    <img class="slide apt-slide active" src="Images/apt1.jpg" alt="Apt Photo 1">
+                    <img class="slide apt-slide" src="Images/apt2.jpg" alt="Apt Photo 2">
+                    <img class="slide apt-slide" src="Images/apt3.jpg" alt="Apt Photo 3">
+                    <img class="slide apt-slide" src="Images/apt4.jpg" alt="Apt Photo 4">
+                    <img class="slide apt-slide" src="Images/kitchen1.jpg" alt="Kitchen 1">
+                    <img class="slide apt-slide" src="Images/kitchen2.jpg" alt="Kitchen 2">
+                    <img class="slide apt-slide" src="Images/kitchen3.jpg" alt="Kitchen 3">
+                    <img class="slide apt-slide" src="Images/kitchen4.jpg" alt="Kitchen 4">
+                    
+                    <button onclick="changeSlide('apt-slide', -1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white hover:text-gold p-3 text-xl">&#10094;</button>
+                    <button onclick="changeSlide('apt-slide', 1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white hover:text-gold p-3 text-xl">&#10095;</button>
                 </div>
+                
+                <div class="p-8">
+                    <h3 class="text-3xl font-serif text-white mb-2">Luxury Apartment Suite</h3>
+                    <p class="text-gray-400 font-light text-sm">Experience the ultimate space with separate living areas and fully equipped premium kitchens.</p>
+                    
+                    <div class="amenity-grid">
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Capacity</span>
+                            <span class="text-white font-serif">Up to 4 Guests</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Climate</span>
+                            <span class="text-white font-serif">Air Conditioning</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Kitchen</span>
+                            <span class="text-white font-serif">Fully Equipped</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Connectivity</span>
+                            <span class="text-white font-serif">High-Speed WiFi</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div id="studio-tour" class="tour-content">
+                <div class="slide-container">
+                    <img class="slide studio-slide active" src="Images/studio1.jpg" alt="Studio Photo 1">
+                    <img class="slide studio-slide" src="Images/studio2.jpg" alt="Studio Photo 2">
+                    <img class="slide studio-slide" src="Images/studio3.jpg" alt="Studio Photo 3">
+                    <img class="slide studio-slide" src="Images/studio4.jpg" alt="Studio Photo 4">
+                    <img class="slide studio-slide" src="Images/studio5.jpg" alt="Studio Photo 5">
+                    <img class="slide studio-slide" src="Images/studio6.jpg" alt="Studio Photo 6">
+                    <img class="slide studio-slide" src="Images/studio7.jpg" alt="Studio Photo 7">
+                    <img class="slide studio-slide" src="Images/studio8.jpg" alt="Studio Photo 8">
+                    
+                    <button onclick="changeSlide('studio-slide', -1)" class="absolute left-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white hover:text-gold p-3 text-xl">&#10094;</button>
+                    <button onclick="changeSlide('studio-slide', 1)" class="absolute right-4 top-1/2 -translate-y-1/2 bg-black bg-opacity-50 text-white hover:text-gold p-3 text-xl">&#10095;</button>
+                </div>
+                
+                <div class="p-8">
+                    <h3 class="text-3xl font-serif text-white mb-2">Premium Studio</h3>
+                    <p class="text-gray-400 font-light text-sm">A highly refined space designed for comfort, featuring top-tier aesthetics and plush bedding.</p>
+                    
+                    <div class="amenity-grid">
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Capacity</span>
+                            <span class="text-white font-serif">Up to 2 Guests</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Climate</span>
+                            <span class="text-white font-serif">Air Conditioning</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Refresh</span>
+                            <span class="text-white font-serif">Hot Water</span>
+                        </div>
+                        <div class="amenity-item">
+                            <span class="block text-gold text-xs uppercase tracking-widest mb-1">Entertainment</span>
+                            <span class="text-white font-serif">HD Smart TV</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="booking-modal" class="modal-overlay fixed inset-0 z-[120] bg-black bg-opacity-90 items-center justify-center p-4">
+        <div class="bg-[#111111] border border-gold p-6 max-w-lg w-full rounded-sm relative">
+            <button onclick="closeBookingModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gold text-2xl">&times;</button>
+            <h3 class="text-2xl font-serif text-gold mb-4">Reservation Request</h3>
+            
+            <form id="reservation-form" class="space-y-4">
+                <select id="room-select" class="w-full p-3 rounded-sm text-sm">
+                    <optgroup label="Luxury Apartments (50,000 CFA)">
+                        <option value="GF_A">Ground Floor Apartment A</option>
+                        <option value="GF_B">Ground Floor Apartment B</option>
+                        <option value="1F_A">1st Floor Apartment A</option>
+                        <option value="1F_B">1st Floor Apartment B</option>
+                    </optgroup>
+                    <optgroup label="Premium Studios (35,000 CFA)">
+                        <option value="GF_A1">Ground Floor Studio A1</option>
+                        <option value="GF_A2">Ground Floor Studio A2</option>
+                        <option value="GF_B1">Ground Floor Studio B1</option>
+                        <option value="GF_B2">Ground Floor Studio B2</option>
+                        <option value="1F_A1">1st Floor Studio A1</option>
+                        <option value="1F_A2">1st Floor Studio A2</option>
+                        <option value="1F_B1">1st Floor Studio B1</option>
+                        <option value="1F_B2">1st Floor Studio B2</option>
+                    </optgroup>
+                </select>
                 <div class="flex space-x-4">
                     <div class="w-1/2">
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Check-in</label>
+                        <label class="block text-xs uppercase text-gray-500 mb-1">Check-in</label>
                         <input type="date" class="w-full p-3 rounded-sm text-sm" required>
                     </div>
                     <div class="w-1/2">
-                        <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Check-out</label>
+                        <label class="block text-xs uppercase text-gray-500 mb-1">Check-out</label>
                         <input type="date" class="w-full p-3 rounded-sm text-sm" required>
                     </div>
                 </div>
-                
-                <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Full Name</label>
-                    <input type="text" placeholder="John Doe" class="w-full p-3 rounded-sm text-sm" required>
-                </div>
-                
-                <div>
-                    <label class="block text-xs uppercase tracking-widest text-gray-400 mb-1">Mobile Money Number</label>
-                    <input type="tel" placeholder="+237 ..." class="w-full p-3 rounded-sm text-sm" required>
-                </div>
-
-                <button type="submit" class="w-full bg-gold text-black py-4 uppercase tracking-widest font-semibold hover:bg-white transition-colors mt-4">
-                    Proceed to Payment (Momo)
-                </button>
+                <input type="text" placeholder="Full Name" class="w-full p-3 rounded-sm text-sm" required>
+                <input type="tel" placeholder="Mobile Money Number" class="w-full p-3 rounded-sm text-sm" required>
+                <button type="submit" class="w-full bg-gold text-black py-4 uppercase font-semibold mt-4 hover:bg-white transition-colors">Proceed to Momo</button>
             </form>
         </div>
     </div>
 
     <script>
-        const modal = document.getElementById('booking-modal');
-        const roomSelect = document.getElementById('room-select');
+        // Booking Modal Logic
+        const bookingModal = document.getElementById('booking-modal');
+        function openBookingModal(type) { bookingModal.classList.add('active'); }
+        function closeBookingModal() { bookingModal.classList.remove('active'); }
 
-        function openBookingModal(type) {
-            modal.classList.add('active');
-            // Auto-scroll dropdown to the correct category based on what they clicked
-            if(type === 'Apartment') {
-                roomSelect.value = 'GF_A';
-            } else if (type === 'Studio') {
-                roomSelect.value = 'GF_A1';
+        // Tour Slider Logic with Auto-Rotation
+        const tourModal = document.getElementById('tour-modal');
+        let currentSlideIndex = 0;
+        let slideInterval;
+        let currentType = '';
+
+        function openTour(type) {
+            tourModal.classList.add('active');
+            document.getElementById('apartment-tour').classList.remove('active');
+            document.getElementById('studio-tour').classList.remove('active');
+            currentType = type;
+            
+            if(type === 'apartment') {
+                document.getElementById('apartment-tour').classList.add('active');
+                showSlide('apt-slide', 0);
+                startAutoSlide('apt-slide');
+            } else {
+                document.getElementById('studio-tour').classList.add('active');
+                showSlide('studio-slide', 0);
+                startAutoSlide('studio-slide');
             }
         }
 
-        function closeBookingModal() {
-            modal.classList.remove('active');
+        function closeTour() { 
+            tourModal.classList.remove('active'); 
+            clearInterval(slideInterval);
         }
 
-        // Close modal if clicking outside the box
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeBookingModal();
+        function changeSlide(slideClassName, n) {
+            clearInterval(slideInterval); // Stop auto-slide if user clicks manually
+            showSlide(slideClassName, currentSlideIndex + n);
+            startAutoSlide(slideClassName); // Restart auto-slide
+        }
+
+        function showSlide(slideClassName, n) {
+            let slides = document.getElementsByClassName(slideClassName);
+            if (n >= slides.length) { currentSlideIndex = 0; }
+            else if (n < 0) { currentSlideIndex = slides.length - 1; }
+            else { currentSlideIndex = n; }
+            
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].classList.remove('active');
             }
-        });
+            slides[currentSlideIndex].classList.add('active');
+        }
+
+        function startAutoSlide(slideClassName) {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(function() {
+                showSlide(slideClassName, currentSlideIndex + 1);
+            }, 3500); // Changes image every 3.5 seconds
+        }
     </script>
 </body>
-    </html>
-    
+                                                                                      </html>
+                                                                                                                                                                                                 
