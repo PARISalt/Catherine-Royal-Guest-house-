@@ -268,30 +268,76 @@
             <div class="masonry-item" onclick="openLightbox(this)">
         
 
-    <div id="lightbox" onclick="closeLightbox(event)">
-        <span class="absolute top-6 right-8 text-white text-4xl cursor-pointer hover:text-gold transition-colors">&times;</span>
-        <img id="lightbox-img" src="" alt="Full screen image">
+    <div id="lightbox" class="fixed inset-0 z-[100] bg-black bg-opacity-95 hidden flex-col items-center justify-center p-4" onclick="closeLightbox(event)">
+        <span class="absolute top-6 right-8 text-white text-4xl cursor-pointer hover:text-gold transition-colors z-50" onclick="closeLightbox(event)">&times;</span>
+        
+        <button onclick="changeGallerySlide(-1, event)" class="absolute left-4 md:left-10 text-white hover:text-gold text-4xl md:text-6xl p-4 z-50 focus:outline-none">&#10094;</button>
+        
+        <img id="lightbox-img" src="" alt="Full screen image" class="max-h-[85vh] max-w-[85vw] object-contain shadow-[0_0_30px_rgba(212,175,55,0.2)] border border-gold transition-opacity duration-300">
+        
+        <button onclick="changeGallerySlide(1, event)" class="absolute right-4 md:right-10 text-white hover:text-gold text-4xl md:text-6xl p-4 z-50 focus:outline-none">&#10095;</button>
+        
+        <p id="lightbox-counter" class="absolute bottom-6 text-gold font-sans text-sm tracking-widest"></p>
     </div>
 
     <script>
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
+        const counter = document.getElementById('lightbox-counter');
+        let currentIdx = 0;
+        let galleryImages = [];
 
-        function openLightbox(element) {
-            const imgSrc = element.querySelector('img').src;
-            lightboxImg.src = imgSrc;
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when open
+        // Auto-detect all your 40 uploaded photos
+        window.addEventListener('DOMContentLoaded', () => {
+            const images = document.querySelectorAll('.masonry-item img');
+            images.forEach((img, index) => {
+                galleryImages.push(img.src); // Add to slider array
+                // Update the click action
+                img.parentElement.onclick = (e) => {
+                    e.preventDefault();
+                    openLightbox(index);
+                };
+            });
+        });
+
+        function openLightbox(index) {
+            currentIdx = index;
+            updateLightboxImage();
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Stop background scrolling
         }
 
         function closeLightbox(event) {
-            // Close if clicking anywhere except the image itself
-            if (event.target !== lightboxImg) {
-                lightbox.classList.remove('active');
+            // Close only if clicking the background or the X
+            if (event.target === lightbox || event.target.tagName === 'SPAN') {
+                lightbox.classList.add('hidden');
+                lightbox.classList.remove('flex');
                 document.body.style.overflow = 'auto'; // Restore scrolling
             }
         }
+
+        function changeGallerySlide(direction, event) {
+            if (event) event.stopPropagation(); // Don't close the modal when clicking arrows
+            
+            currentIdx += direction;
+            // Loop around if they hit the end
+            if (currentIdx >= galleryImages.length) currentIdx = 0;
+            if (currentIdx < 0) currentIdx = galleryImages.length - 1;
+            
+            // Tiny fade effect between images
+            lightboxImg.style.opacity = 0;
+            setTimeout(() => {
+                updateLightboxImage();
+                lightboxImg.style.opacity = 1;
+            }, 150);
+        }
+
+        function updateLightboxImage() {
+            lightboxImg.src = galleryImages[currentIdx];
+            counter.innerText = (currentIdx + 1) + " / " + galleryImages.length;
+        }
     </script>
 </body>
-                  </html>
-  
+</html>
+
