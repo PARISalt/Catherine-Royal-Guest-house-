@@ -28,8 +28,39 @@
         body { background-color: #0A0A0A; color: #FAFAFA; overflow-x: hidden; }
         
         /* Auto-Rotating Hero Styles */
-        .hero-slide { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 1.5s ease-in-out; }
-        .hero-slide.active { opacity: 0.6; } /* Kept at 0.6 so the white text is readable */
+                /* Advanced Cinematic Hero Styles */
+        .hero-slide { 
+            position: absolute; 
+            inset: 0; 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            opacity: 0; 
+            transform: scale(1); /* Start normal size */
+            transition: opacity 1.5s ease-in-out, transform 8s linear; /* Smooth fade and slow zoom */
+        }
+        
+        .hero-slide.active { 
+            opacity: 0.6; 
+            transform: scale(1.1); /* Zoom in by 10% while visible */
+        }
+
+        /* Smooth Text Reveal Animation */
+        .reveal-text {
+            animation: floatUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        
+        .reveal-delay-1 { animation-delay: 0.3s; }
+        .reveal-delay-2 { animation-delay: 0.6s; }
+
+        @keyframes floatUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
         /* Full Screen Menu Styles */
         #mobile-menu { transform: translateX(100%); transition: transform 0.5s cubic-bezier(0.77, 0.2, 0.05, 1); }
@@ -95,10 +126,10 @@
             <img class="hero-slide" src="Images/image-164.jpg" alt="Guest House Interior">
         </div>
         
-        <div class="relative z-10 px-4 mt-[-10vh]">
-            <h2 class="text-gold uppercase tracking-[0.4em] text-xs md:text-sm mb-6 drop-shadow-md">Welcome to Bamenda</h2>
-            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 drop-shadow-lg">Catherine Royale</h1>
-            <p class="max-w-2xl mx-auto text-gray-200 text-lg md:text-xl font-light drop-shadow-md">A sanctuary of modern luxury, exclusive events, and premium comfort.</p>
+                <div class="relative z-10 px-4 mt-[-10vh]">
+            <h2 class="text-gold uppercase tracking-[0.4em] text-xs md:text-sm mb-6 drop-shadow-md reveal-text">Welcome to Bamenda</h2>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-white mb-6 drop-shadow-lg reveal-text reveal-delay-1">Catherine Royale</h1>
+            <p class="max-w-2xl mx-auto text-gray-200 text-lg md:text-xl font-light drop-shadow-md reveal-text reveal-delay-2">A sanctuary of modern luxury, exclusive events, and premium comfort.</p>
         </div>
 
         <div class="absolute bottom-0 left-0 w-full transform translate-y-1/2 z-20 px-4">
